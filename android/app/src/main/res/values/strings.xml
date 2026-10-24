@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Apna Files</string>
+    <string name="relay_channel_name">Transfer session</string>
+    <string name="relay_channel_description">Keeps this device reachable by your paired devices while Apna Files is open.</string>
+</resources>

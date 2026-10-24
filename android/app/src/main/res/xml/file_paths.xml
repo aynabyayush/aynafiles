@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Temporary files opened from a paired device live in <cache>/apna/open and are
+         purged when the session ends. This is the only path ever shared outside the app. -->
+    <cache-path
+        name="open"
+        path="apna/open/" />
+</paths>

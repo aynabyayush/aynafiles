@@ -1,0 +1,20 @@
+name = "apnafiles-relay"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+# Both Durable Objects run on the SQLite storage backend, which is the one available
+# on Cloudflare's free plan.
+[[durable_objects.bindings]]
+name = "DIRECTORY"
+class_name = "Directory"
+
+[[durable_objects.bindings]]
+name = "ROOM"
+class_name = "Room"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Directory", "Room"]
+
+[observability]
+enabled = true

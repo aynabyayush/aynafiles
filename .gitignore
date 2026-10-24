@@ -1,0 +1,6 @@
+.toolchain/
+node_modules/
+**/build/
+android/local.properties
+android/.gradle/
+cloudflare/.wrangler/
