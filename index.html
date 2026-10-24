@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AYNAFiles — Secure P2P File Sharing & Remote Explorer</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png"/> 
+  <meta name="description" content="Secure peer-to-peer file sharing and remote folder explorer for Android with encrypted relay support." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: '#111116',
+            surfaceHigh: '#181820',
+            borderCol: '#22222c',
+            accent: '#10b981',
+            accentGlow: 'rgba(16, 185, 129, 0.2)',
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    /* Custom Glassmorphism & Ambient Glows */
+    .glass-card {
+      background: rgba(17, 17, 22, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .glass-card:hover {
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.1);
+    }
+    .glass-nav {
+      background: rgba(8, 8, 10, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .ambient-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .float-anim {
+      animation: float 5s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-[#08080a] text-zinc-100 font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
+
+  <!-- Ambient Background Glows -->
+  <div class="ambient-glow -top-32 -left-32"></div>
+  <div class="ambient-glow top-1/2 -right-32"></div>
+
+  <!-- Navigation -->
+  <header class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono font-bold text-lg group-hover:scale-105 transition-transform">
+          <img src="favicon.png" alt="AYNAFiles Logo" class="w-6 h-6" />
+        </div>
+        <div>
+          <span class="font-bold text-lg tracking-tight">AYNA<span class="text-emerald-400">Files</span></span>
+          <span class="block text-[10px] font-mono text-zinc-500 tracking-wider">BY AYUSH NARAYAN</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 font-mono text-sm text-zinc-400">
+        <a href="#features" class="hover:text-emerald-400 transition-colors">features</a>
+        <a href="#relay" class="hover:text-emerald-400 transition-colors">p2p-relay</a>
+        <a href="#download" class="hover:text-emerald-400 transition-colors">releases</a>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/aynabyayush/AYNAFiles" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 hover:border-emerald-500/50 bg-white/[0.02] hover:bg-white/[0.05] text-sm font-mono transition-all">
+          <i class="fa-brands fa-github text-emerald-400"></i> GitHub
+        </a>
+        <a href="#download" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-sm transition-all shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-download"></i> Get APK
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-36 pb-20 px-6 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+    <div class="flex-1 text-center lg:text-left z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        v1.0.0 STABLE RELEASE • ANDROID 10+
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
+        Frictionless P2P <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">File Sharing & Remote Explorer.</span>
+      </h1>
+      <p class="text-zinc-400 text-lg max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+        Secure peer-to-peer file transfers and remote folder explorer built for Android. Direct encrypted relay support with zero permanent cloud storage.
+      </p>
+      <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+        <a href="#download" class="px-8 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold flex items-center gap-3 transition-all transform hover:-translate-y-0.5 shadow-xl shadow-emerald-500/20">
+          <i class="fa-solid fa-download text-lg"></i> Download AYNAFiles v1.0.0
+        </a>
+        <a href="https://github.com/aynabyayush/AYNAFiles" target="_blank" rel="noopener" class="px-8 py-4 rounded-2xl glass-card text-zinc-200 font-semibold flex items-center gap-3 hover:bg-white/[0.05] transition-all">
+          <i class="fa-solid fa-code text-emerald-400 text-lg"></i> View Source
+        </a>
+      </div>
+    </div>
+
+    <!-- Interactive Glass Phone Mockup / Preview Card -->
+    <div class="flex-1 w-full max-w-md relative z-10 float-anim">
+      <div class="glass-card rounded-3xl p-6 relative overflow-hidden shadow-2xl">
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <i class="fa-solid fa-shield-halved text-sm"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold">Relay Connection</h3>
+              <p class="text-[11px] font-mono text-emerald-400">● Active & Secure WebSocket</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 font-mono text-xs text-zinc-400">P2P v1.0.0</span>
+        </div>
+
+        <div class="space-y-4 font-mono text-xs">
+          <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+            <span class="text-zinc-400">Device ID:</span>
+            <span class="text-emerald-400 font-bold select-all">0x7F9A...4B21</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+            <span class="text-zinc-400">Shared Storage:</span>
+            <span class="text-zinc-200">Android/data/.../Shared</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between">
+            <span class="text-emerald-300">Transient Cache:</span>
+            <span class="text-emerald-400 font-bold">Purged on exit</span>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-zinc-500 font-mono">
+          <span>Latency: ~14ms</span>
+          <span>End-to-End Encrypted</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bento Grid Features Section -->
+  <section id="features" class="py-24 px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <h2 class="font-mono text-xs uppercase tracking-widest text-emerald-400 mb-3">[ CAPABILITIES ]</h2>
+      <p class="text-3xl sm:text-4xl font-bold tracking-tight">Engineered for absolute privacy and speed.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Feature 1 -->
+      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between transition-all group">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-lock text-xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">End-to-End P2P Encryption</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Direct device-to-device transfers through authenticated key pairs. Your files never touch a permanent third-party cloud database.
+          </p>
+        </div>
+        <div class="mt-8 pt-4 border-t border-white/5 font-mono text-xs text-emerald-400 flex items-center gap-2">
+          <i class="fa-solid fa-shield">></i> Secure WebSocket Relay
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between transition-all group">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-bolt text-xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Cloudflare Worker Relay</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Lightweight relay server built on Cloudflare Workers for instant pairing across networks without port-forwarding hassles.
+          </p>
+        </div>
+        <div class="mt-8 pt-4 border-t border-white/5 font-mono text-xs text-emerald-400 flex items-center gap-2">
+          <i class="fa-solid fa-network-wired"></i> Global Edge Routing
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="glass-card rounded-3xl p-8 flex flex-col justify-between transition-all group">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-folder-tree text-xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Transient Caching</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Previews and files are cached only long enough for the viewer app to read them, automatically purged the moment your session ends.
+          </p>
+        </div>
+        <div class="mt-8 pt-4 border-t border-white/5 font-mono text-xs text-emerald-400 flex items-center gap-2">
+          <i class="fa-solid fa-trash-can"></i> Zero Data Left Behind
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- P2P Relay & How it Works Section -->
+  <section id="relay" class="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="font-mono text-xs uppercase tracking-widest text-emerald-400 mb-3 block">[ ARCHITECTURE ]</span>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6">How AYNAFiles Keeps You Connected.</h2>
+        <p class="text-zinc-400 mb-8 leading-relaxed">
+          AYNAFiles maintains a secure WebSocket connection to your Cloudflare relay while running in the background. Paired devices can instantly browse folders, pull archives, and stream files securely.
+        </p>
+
+        <div class="space-y-4 font-mono text-sm">
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">1</div>
+            <div>
+              <h4 class="font-bold text-zinc-200 mb-1">Pairing via QR / ID</h4>
+              <p class="text-xs text-zinc-400 font-sans">Exchange cryptographic keys securely in person or via verified QR codes.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">2</div>
+            <div>
+              <h4 class="font-bold text-zinc-200 mb-1">Background Service Daemon</h4>
+              <p class="text-xs text-zinc-400 font-sans">Stays reachable overnight with unrestricted battery optimization support.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-3xl p-8 border border-white/10 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none"></div>
+        <h3 class="font-mono text-xs uppercase text-zinc-400 mb-6">[ LIVE TELEMETRY SIMULATOR ]</h3>
+
+        <div class="space-y-4 font-mono text-xs">
+          <div class="flex justify-between items-center p-3 rounded-xl bg-black/40 border border-white/5">
+            <span class="text-zinc-400">Relay Status</span>
+            <span class="text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-circle text-[8px] animate-pulse"></i> Connected</span>
+          </div>
+          <div class="flex justify-between items-center p-3 rounded-xl bg-black/40 border border-white/5">
+            <span class="text-zinc-400">Active Sessions</span>
+            <span class="text-zinc-200">1 Peer Connected</span>
+          </div>
+          <div class="flex justify-between items-center p-3 rounded-xl bg-black/40 border border-white/5">
+            <span class="text-zinc-400">Protocol</span>
+            <span class="text-cyan-400">WSS / Secure TLS 1.3</span>
+          </div>
+          <div class="flex justify-between items-center p-3 rounded-xl bg-black/40 border border-white/5">
+            <span class="text-zinc-400">Cache Status</span>
+            <span class="text-emerald-400">Clean (0 MB Stored)</span>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-white/10 text-center">
+          <span class="text-xs text-zinc-500 font-mono">End-to-End Encrypted over Cloudflare Worker</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download APK Section -->
+  <section id="download" class="py-24 px-6 max-w-5xl mx-auto text-center">
+    <div class="glass-card rounded-3xl p-10 sm:p-16 border border-emerald-500/20 relative overflow-hidden shadow-2xl">
+      <div class="absolute -top-32 -left-32 w-64 h-64 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-xs mb-6">
+        LATEST RELEASE v1.0.0
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-bold tracking-tight mb-4">Ready to simplify your file sharing?</h2>
+      <p class="text-zinc-400 max-w-lg mx-auto mb-10 text-base">
+        Download AYNAFiles APK directly or browse the GitHub repository to build from source.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="https://github.com/aynabyayush/AYNAFiles/releases" target="_blank" rel="noopener" class="px-8 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold flex items-center gap-3 transition-all shadow-xl shadow-emerald-500/25">
+          <i class="fa-solid fa-download"></i> Download APK (v1.0.0)
+        </a>
+        <a href="https://github.com/aynabyayush/AYNAFiles" target="_blank" rel="noopener" class="px-8 py-4 rounded-2xl glass-card text-zinc-200 font-semibold flex items-center gap-3 hover:bg-white/[0.05] transition-all">
+          <i class="fa-brands fa-github text-emerald-400"></i> GitHub Releases
+        </a>
+      </div>
+
+      <div class="mt-8 text-xs font-mono text-zinc-500 flex items-center justify-center gap-6">
+        <span>Requires Android 10+</span>
+        <span>•</span>
+        <span>Open Source</span>
+        <span>•</span>
+        <span>No Ads / Trackers</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-12 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-sm font-mono text-zinc-500">
+      <div class="flex items-center gap-2">
+        <span>&copy; <span id="year"></span> Ayush Narayan</span>
+        <span class="text-emerald-500">•</span>
+        <span>AYNAbyAyush</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="https://github.com/aynabyayush" target="_blank" rel="noopener" class="hover:text-emerald-400 transition-colors">GitHub</a>
+        <a href="mailto:ayush.narayan07@gmail.com" class="hover:text-emerald-400 transition-colors">Email</a>
+        <a href="https://aynabyayush.github.io" target="_blank" rel="noopener" class="hover:text-emerald-400 transition-colors">Portfolio</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
