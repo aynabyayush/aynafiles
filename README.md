@@ -1,4 +1,4 @@
-# Apna Files
+# AYNAFiles
 
 Private, temporary file access between your own devices.
 
@@ -51,7 +51,7 @@ This repository contains both halves:
 - The Room object has no storage: it is a pipe. Nothing is written to R2, D1 or disk.
 
 Identity, signing and address derivation live in
-[`android/app/src/main/java/com/ayush/apnafiles/core`](android/app/src/main/java/com/ayush/apnafiles/core)
+[`android/app/src/main/java/com/ayush/aynafiles/core`](android/app/src/main/java/com/ayush/aynafiles/core)
 and are verified against the same `@noble/curves` primitives the Worker uses
 (`android/app/src/test/.../CryptoTest.kt`).
 
